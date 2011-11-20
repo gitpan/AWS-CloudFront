@@ -1,0 +1,26 @@
+--- #YAML:1.0
+name:               AWS-CloudFront
+version:            0.001
+abstract:           Lightweight interface to Amazon CloudFront CDN
+author:
+    - John Drago <jdrago_999@yahoo.com>
+license:            perl
+distribution_type:  module
+test_requires:
+    Test::More:       0
+requires:
+    Carp:              0
+    LWP::UserAgent:    0
+    Digest::HMAC_SHA1: 0
+    MIME::Base64:      0
+    URI::Escape:       0
+    VSO:               0.003
+recommends:
+no_index:
+    directory:
+        - t
+        - inc
+generated_by:       Hand
+meta-spec:
+    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
+    version:  1.4

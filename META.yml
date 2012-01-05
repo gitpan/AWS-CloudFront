@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               AWS-CloudFront
-version:            0.001
+version:            0.002
 abstract:           Lightweight interface to Amazon CloudFront CDN
 author:
     - John Drago <jdrago_999@yahoo.com>
@@ -9,12 +9,15 @@ distribution_type:  module
 test_requires:
     Test::More:       0
 requires:
-    Carp:              0
-    LWP::UserAgent:    0
-    Digest::HMAC_SHA1: 0
-    MIME::Base64:      0
-    URI::Escape:       0
-    VSO:               0.003
+    AWS::S3:                  0.023
+    Carp:                     0
+    LWP::UserAgent:           0
+    Digest::HMAC_SHA1:        0
+    MIME::Base64:             0
+    URI::Escape:              0
+    VSO:                      0.003
+    Data::Validate::Domain:   0.10
+    LWP::Protocol::https:     6.02
 recommends:
 no_index:
     directory:

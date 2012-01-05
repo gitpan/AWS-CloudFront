@@ -20,7 +20,7 @@ has 'Comment' => (
 has 'Location' => (
   is        => 'ro',
   isa       => 'Str',
-  required  => 1,
+  required  => 0,
 );
 
 has 'Id' => (

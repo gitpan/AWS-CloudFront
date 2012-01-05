@@ -11,8 +11,9 @@ use Class::Load 'load_class';
 use AWS::CloudFront::Distribution;
 use AWS::CloudFront::S3Origin;
 use AWS::CloudFront::CustomOrigin;
+use AWS::CloudFront::OriginAccessIdentity;
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 has 'access_key_id' => (
   is        => 'ro',
@@ -172,6 +173,47 @@ sub distributions
   
   return @dists;
 }# end distributions()
+
+
+sub origin_access_identities
+{
+  my ($s, %args) = @_;
+  
+  my @out = ( );
+  FETCH: {
+    my $response = $s->request( 'GetOriginAccessIdentityList', %args )->request();
+
+    my $xpc = $response->xpc;
+    foreach my $node ( $xpc->findnodes('.//cf:CloudFrontOriginAccessIdentitySummary') )
+    {
+      my ($config) = $xpc->findnodes('.//cf:CloudFrontOriginAccessIdentityConfig');
+      my $ident = $s->origin_access_identity( $xpc->findvalue('.//cf:Id', $node) );
+      push @out, $ident;
+    }# end foreach()
+    if( $xpc->findvalue('.//cf:IsTruncated') eq 'true' )
+    {
+      $args{Marker} = $xpc->findvalue('.//cf:NextMarker');
+      next FETCH;
+    }# end if()
+  };
+  
+  return @out;
+}# end origin_access_identities()
+
+
+sub origin_access_identity
+{
+  my ($s, $id) = @_;
+  
+  my $response = $s->request( 'GetOriginAccessIdentity', Id => $id )->request();
+  my $xpc = $response->xpc;
+  return AWS::CloudFront::OriginAccessIdentity->new(
+    Id                => $xpc->findvalue('.//cf:Id'),
+    S3CanonicalUserId => $xpc->findvalue('.//cf:S3CanonicalUserId'),
+    CallerReference   => $xpc->findvalue('.//cf:CallerReference'),
+    Comment           => $xpc->findvalue('.//cf:Comment'),
+  );
+}# end origin_access_identity()
 
 
 1;# return true:

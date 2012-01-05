@@ -27,7 +27,7 @@ has 'CNAME' => (
   isa       => 'Str',
   required  => 0,
   where     => sub {
-    is_domain($_[0], {do_allow_underscore => 1})
+    is_domain($_, {do_allow_underscore => 1})
   }
 );
 
@@ -42,7 +42,7 @@ has 'Enabled' => (
   isa       => 'Str',
   required  => 1,
   where     => sub {
-    $_[0] =~ m{^(true|false)$}
+    $_ =~ m{^(true|false)$}
   }
 );
 
@@ -51,10 +51,9 @@ has 'DefaultRootObject' => (
   isa       => 'Str',
   required  => 0,
   where     => sub {
-    my $val = shift;
-    (! defined $val) ||
-    (! length $val) ||
-    $val =~ m{^([
+    (! defined $_) ||
+    (! length $_) ||
+    $_ =~ m{^([
       a-z
       A-Z
       0-9
@@ -88,7 +87,7 @@ sub BUILD
   
   die 'Must specify either an S3Origin or a CustomOrigin.'
     unless $s->S3Origin || $s->CustomOrigin;
-  die 'You cannot use S3Origin and CustomOrigin in the same distribution.'
+  die 'You cannot use both S3Origin and CustomOrigin in the same distribution.'
     if $s->S3Origin && $s->CustomOrigin;
 }# end BUILD()
 

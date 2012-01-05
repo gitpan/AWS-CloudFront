@@ -106,6 +106,21 @@ has 'TrustedSigners' => (
   required  => 0,
 );
 
+has 'OriginAccessIdentity' => (
+  is        => 'ro',
+  isa       => 'Maybe[AWS::CloudFront::OriginAccessIdentity]',
+  required  => 0,
+  lazy      => 1,
+  default   => sub {
+    my $s = shift;
+    
+    foreach my $ident ( $s->cf->origin_access_identities )
+    {
+    
+    }# end foreach()
+  }
+);
+
 
 sub update
 {
@@ -155,16 +170,28 @@ sub create_origin_access_identity
   {
     return AWS::CloudFront::OriginAccessIdentity->new(
       Id                => $xpc->findvalue('.//cf:Id', $node),
-      S3CanonicalUserId => $xpc->findvalue('.//cf:S3CanonicalUserId'),
-      CallerReference   => $xpc->findvalue('.//cf:CallerReference'),
+      S3CanonicalUserId => $xpc->findvalue('.//cf:S3CanonicalUserId', $node),
+      CallerReference   => $xpc->findvalue('.//cf:CallerReference', $node),
       Location          => $response->response->header('Location'),
     );
   }
+  elsif( my ($error) = $xpc->findnodes('.//cf:Error') )
+  {
+    if( my ($code) = $response->response->content =~ m{<Code>(.+?)</Code>}s )
+    {
+      # The origin already exists or some other error.
+      die $code;
+    }
+    else
+    {
+      die "Invalid response: ", $response->response->content;
+    }# end if()
+  }
   else
   {
-    die "Invalid response: ", $response->res->content;
+    die "Invalid response: ", $response->response->content;
   }# end if()
-}# end 
+}# end create_origin_access_identity()
 
 1;# return true:
 

@@ -11,7 +11,7 @@ all_from 'lib/AWS/CloudFront.pm';
 test_requires 'Test::More'  => '0';
 
 requires      'VSO'                       => '0.022';
-requires      'AWS::S3'                   => '0.023';
+requires      'AWS::S3'                   => '0.024';
 requires      'Carp'                      => '0';
 requires      'HTTP::Date'                => '0';
 requires      'MIME::Base64'              => '0';

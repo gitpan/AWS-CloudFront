@@ -21,6 +21,8 @@ lib/AWS/CloudFront/Request/DeleteDistribution.pm
 lib/AWS/CloudFront/Request/DistributionRequest.pm
 lib/AWS/CloudFront/Request/GetDistribution.pm
 lib/AWS/CloudFront/Request/GetDistributionList.pm
+lib/AWS/CloudFront/Request/GetOriginAccessIdentity.pm
+lib/AWS/CloudFront/Request/GetOriginAccessIdentityList.pm
 lib/AWS/CloudFront/Request/UpdateDistribution.pm
 lib/AWS/CloudFront/ResponseParser.pm
 lib/AWS/CloudFront/S3Origin.pm
